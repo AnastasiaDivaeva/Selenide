@@ -1,6 +1,10 @@
 package divaeva.selenide.hw2;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 
