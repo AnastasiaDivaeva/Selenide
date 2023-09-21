@@ -10,15 +10,17 @@ import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class SearchBookByTittle {
     public static void main(String[] args) {
+        int expectedSearchResultsCount = 4;
         openSite();
         doLogin();
-        prepareSearchQuery();
-        ElementsCollection searchResult = submitSearchQuery();
-
-        Assert.assertEquals(searchResult.size(), 4);
+        SelenideElement searchInput = prepareSearchQuery();
+        submitSearchQuery(searchInput);
+        ElementsCollection searchResult = getSearchResult();
+        Assert.assertEquals(searchResult.size(), expectedSearchResultsCount);
         for (SelenideElement element : searchResult) {
             String resultText = element.getText();
             Assert.assertTrue(resultText.contains("Тема для медитації"));
@@ -28,6 +30,7 @@ public class SearchBookByTittle {
 
     private static void openSite() {
         Selenide.open(TestUtils.STARY_LEV_URL);
+        getWebDriver().manage().window().maximize();
     }
 
     private static void doLogin() {
@@ -41,12 +44,16 @@ public class SearchBookByTittle {
         $x("//button[text()='Увійти']").click();
     }
 
-    private static void prepareSearchQuery() {
-        $x("//input[@placeholder='Шукати...']").setValue("Тема для медитації");
+    private static SelenideElement prepareSearchQuery() {
+        SelenideElement searchInput = $x("//input[@placeholder='Шукати...']").setValue("Тема для медитації");
+        return searchInput;
     }
 
-    private static ElementsCollection submitSearchQuery() {
+    private static void submitSearchQuery(SelenideElement searchInput) {
         $x("//a[ text()='Переглянути більше']").shouldBe(Condition.visible).click();
+    }
+
+    private static ElementsCollection getSearchResult() {
         SelenideElement allResults = $(By.className("Search_search__results__YQ7KH"));
         return allResults
                 .$$x(".//div[contains(@class, 'Search_search__result-item__7')]")

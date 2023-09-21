@@ -8,14 +8,16 @@ import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class RegistrationOnTheSite {
     public static void main(String[] args) {
         openSite();
         findRegistrationButton();
         fillInRegistrationInfo();
-        SelenideElement registerSMS = submitRegistration();
-
+        submitRegistration();
+        SelenideElement registerSMS = $x("//h3[text()='СМС-підтвердження']")
+                .shouldBe(Condition.visible);
         String registerSMSText = registerSMS.getText();
         Assert.assertEquals(registerSMSText, "СМС-підтвердження");
         Selenide.closeWebDriver();
@@ -23,6 +25,7 @@ public class RegistrationOnTheSite {
 
     private static void openSite() {
         Selenide.open(TestUtils.STARY_LEV_URL);
+        getWebDriver().manage().window().maximize();
     }
 
     private static void findRegistrationButton() {
@@ -43,9 +46,7 @@ public class RegistrationOnTheSite {
         $(By.className("ant-checkbox-input")).click();
     }
 
-    private static SelenideElement submitRegistration() {
+    private static void submitRegistration() {
         $x("//button[text()='Зареєструватись']").click();
-        return $x("//h3[text()='СМС-підтвердження']")
-                .shouldBe(Condition.visible);
     }
 }

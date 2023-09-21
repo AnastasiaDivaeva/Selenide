@@ -5,5 +5,7 @@ public class TestUtils {
     public static final String PASSWORD = "qazwsxedc";
 
     public static final String STARY_LEV_URL = "https://starylev.com.ua/";
+
 }
+
 

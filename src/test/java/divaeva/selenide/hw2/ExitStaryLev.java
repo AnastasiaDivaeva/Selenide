@@ -7,19 +7,22 @@ import com.codeborne.selenide.SelenideElement;
 import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class ExitStaryLev {
     public static void main(String[] args) {
         openSite();
         doLogin();
         openMyAccount();
-        SelenideElement buttonLoginAfterExit = logoutFromMyAccount();
+        logoutFromMyAccount();
+        SelenideElement buttonLoginAfterExit = $x("//button[text()='Вхід | Реєстрація']");
         Assert.assertEquals(buttonLoginAfterExit.getText(), "Вхід | Реєстрація");
         Selenide.closeWebDriver();
     }
 
     private static void openSite() {
         Selenide.open(TestUtils.STARY_LEV_URL);
+        getWebDriver().manage().window().maximize();
     }
 
     private static void doLogin() {
@@ -35,8 +38,7 @@ public class ExitStaryLev {
         $x("//a[text()='Мій кабінет']").click();
     }
 
-    private static SelenideElement logoutFromMyAccount() {
+    private static void logoutFromMyAccount() {
         $x("//button[text()='Вихід']").click();
-        return $x("//button[text()='Вхід | Реєстрація']");
     }
 }
