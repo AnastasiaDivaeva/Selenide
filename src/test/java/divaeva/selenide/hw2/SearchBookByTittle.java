@@ -17,8 +17,8 @@ public class SearchBookByTittle {
         int expectedSearchResultsCount = 4;
         openSite();
         doLogin();
-        SelenideElement searchInput = prepareSearchQuery();
-        submitSearchQuery(searchInput);
+        prepareSearchQuery();
+        submitSearchQuery();
         ElementsCollection searchResult = getSearchResult();
         Assert.assertEquals(searchResult.size(), expectedSearchResultsCount);
         for (SelenideElement element : searchResult) {
@@ -44,12 +44,11 @@ public class SearchBookByTittle {
         $x("//button[text()='Увійти']").click();
     }
 
-    private static SelenideElement prepareSearchQuery() {
+    private static void prepareSearchQuery() {
         SelenideElement searchInput = $x("//input[@placeholder='Шукати...']").setValue("Тема для медитації");
-        return searchInput;
     }
 
-    private static void submitSearchQuery(SelenideElement searchInput) {
+    private static void submitSearchQuery() {
         $x("//a[ text()='Переглянути більше']").shouldBe(Condition.visible).click();
     }
 
